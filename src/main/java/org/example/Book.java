@@ -11,6 +11,17 @@ public class Book {
     private int year;
     private String country;
 
+    public Book() {
+    }
+
+    public Book(String title, String author, int price, int year, String country) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.year = year;
+        this.country = country;
+    }
+
     // Сетери гетери
     public String getTitle() {
         return title;
@@ -53,6 +64,26 @@ public class Book {
         this.country = country;
     }
 
+    @Override
+    public String toString() {
+        return "Book{title='" + title + "', author='" + author + "', price=" + price
+                + ", year=" + year + ", country='" + country + "'}";
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return price == book.price && year == book.year
+                && Objects.equals(title, book.title)
+                && Objects.equals(author, book.author)
+                && Objects.equals(country, book.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, author, price, year, country);
+    }
 
 }
