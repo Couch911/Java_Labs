@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.Year;
 import java.util.Objects;
 
 /**
@@ -7,8 +8,14 @@ import java.util.Objects;
  * <p>
  * Містить інформацію про назву, автора, ціну, рік видання,
  * країну видання, кількість сторінок та жанр книги.
+ * <p>
+ * Усі значення перевіряються на коректність у конструкторі та сетерах.
+ * У разі некоректних даних кидається {@link IllegalArgumentException}.
  */
 public class Book {
+
+    /** Мінімально допустимий рік видання (поява книгодрукування). */
+    public static final int MIN_YEAR = 1450;
 
     /** Назва книги. */
     private String title;
@@ -32,31 +39,27 @@ public class Book {
     private String genre;
 
     /**
-     * Створює порожню книгу без заданих значень полів.
-     */
-    public Book() {
-    }
-
-    /**
      * Створює книгу із заданими значеннями всіх полів.
+     * Кожне значення перевіряється відповідним сетером.
      *
-     * @param title   назва книги
-     * @param author  автор книги
-     * @param price   ціна книги
-     * @param year    рік видання
-     * @param country країна видання
-     * @param pages   кількість сторінок
-     * @param genre   жанр книги
+     * @param title   назва книги (не порожня)
+     * @param author  автор книги (не порожній)
+     * @param price   ціна книги (більше 0)
+     * @param year    рік видання (від {@value #MIN_YEAR} до поточного року)
+     * @param country країна видання (не порожня)
+     * @param pages   кількість сторінок (більше 0)
+     * @param genre   жанр книги (не порожній)
+     * @throws IllegalArgumentException якщо хоча б один параметр некоректний
      */
     public Book(String title, String author, int price, int year,
                 String country, int pages, String genre) {
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.year = year;
-        this.country = country;
-        this.pages = pages;
-        this.genre = genre;
+        setTitle(title);
+        setAuthor(author);
+        setPrice(price);
+        setYear(year);
+        setCountry(country);
+        setPages(pages);
+        setGenre(genre);
     }
 
     /**
@@ -72,9 +75,10 @@ public class Book {
      * Встановлює назву книги.
      *
      * @param title нова назва книги
+     * @throws IllegalArgumentException якщо назва {@code null} або порожня
      */
     public void setTitle(String title) {
-        this.title = title;
+        this.title = requireNotBlank(title, "Назва");
     }
 
     /**
@@ -90,9 +94,10 @@ public class Book {
      * Встановлює автора книги.
      *
      * @param author новий автор книги
+     * @throws IllegalArgumentException якщо автор {@code null} або порожній
      */
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = requireNotBlank(author, "Автор");
     }
 
     /**
@@ -108,8 +113,12 @@ public class Book {
      * Встановлює ціну книги.
      *
      * @param price нова ціна книги
+     * @throws IllegalArgumentException якщо ціна менша або дорівнює 0
      */
     public void setPrice(int price) {
+        if (price <= 0) {
+            throw new IllegalArgumentException("Ціна повинна бути більшою за 0, отримано: " + price);
+        }
         this.price = price;
     }
 
@@ -126,8 +135,15 @@ public class Book {
      * Встановлює рік видання книги.
      *
      * @param year новий рік видання
+     * @throws IllegalArgumentException якщо рік менший за {@value #MIN_YEAR}
+     *                                  або більший за поточний
      */
     public void setYear(int year) {
+        int currentYear = Year.now().getValue();
+        if (year < MIN_YEAR || year > currentYear) {
+            throw new IllegalArgumentException("Рік видання повинен бути в межах "
+                    + MIN_YEAR + "–" + currentYear + ", отримано: " + year);
+        }
         this.year = year;
     }
 
@@ -144,9 +160,10 @@ public class Book {
      * Встановлює країну видання книги.
      *
      * @param country нова країна видання
+     * @throws IllegalArgumentException якщо країна {@code null} або порожня
      */
     public void setCountry(String country) {
-        this.country = country;
+        this.country = requireNotBlank(country, "Країна");
     }
 
     /**
@@ -162,8 +179,12 @@ public class Book {
      * Встановлює кількість сторінок книги.
      *
      * @param pages нова кількість сторінок
+     * @throws IllegalArgumentException якщо кількість сторінок менша або дорівнює 0
      */
     public void setPages(int pages) {
+        if (pages <= 0) {
+            throw new IllegalArgumentException("Кількість сторінок повинна бути більшою за 0, отримано: " + pages);
+        }
         this.pages = pages;
     }
 
@@ -180,9 +201,25 @@ public class Book {
      * Встановлює жанр книги.
      *
      * @param genre новий жанр книги
+     * @throws IllegalArgumentException якщо жанр {@code null} або порожній
      */
     public void setGenre(String genre) {
-        this.genre = genre;
+        this.genre = requireNotBlank(genre, "Жанр");
+    }
+
+    /**
+     * Перевіряє, що рядок не {@code null} і не складається лише з пробілів.
+     *
+     * @param value     рядок для перевірки
+     * @param fieldName назва поля (для повідомлення про помилку)
+     * @return рядок без пробілів на початку та в кінці
+     * @throws IllegalArgumentException якщо рядок {@code null} або порожній
+     */
+    private static String requireNotBlank(String value, String fieldName) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " не може бути порожнім значенням");
+        }
+        return value.trim();
     }
 
     /**
