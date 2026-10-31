@@ -49,7 +49,7 @@ public class Main {
     private static void printMenu() {
         System.out.println("1. Створити нову книгу");
         System.out.println("2. Вивести створені книги");
-        System.out.println("3. Завершити роботу");
+        System.out.println("0. Завершити роботу");
     }
 
     /**
@@ -63,7 +63,7 @@ public class Main {
         int price = readInt("Ціна:");
         int year = readInt("Рік видання:");
         String country = readNonEmptyLine("Країна:");
-        int pages = readInt("Строінки:");
+        int pages = readInt("Сторінки:");
         String genre = readNonEmptyLine("Жанр:");
 
         try{
@@ -72,7 +72,7 @@ public class Main {
             System.out.println("Книгу додано: " + book);
         }catch (IllegalArgumentException e) {
             System.out.println("Помилка:" + e.getMessage());
-            System.out.println("Книгу не створено:");
+            System.out.println("Книгу не створено");
         }
     }
 
