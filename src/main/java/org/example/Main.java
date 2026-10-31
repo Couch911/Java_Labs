@@ -37,7 +37,10 @@ public class Main {
         int year = readInt(scanner, "Рік видання: ");
         System.out.print("Країна: ");
         String country = scanner.nextLine();
-        return new Book(title, author, price, year, country);
+        int pages = readInt(scanner, "Кількість сторінок: ");
+        System.out.print("Жанр: ");
+        String genre = scanner.nextLine();
+        return new Book(title, author, price, year, country, pages, genre);
     }
 
     private static int readInt(Scanner scanner, String prompt) {
