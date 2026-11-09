@@ -64,7 +64,19 @@ public class Main {
         int year = readInt("Рік видання:");
         String country = readNonEmptyLine("Країна:");
         int pages = readInt("Сторінки:");
-        String genre = readNonEmptyLine("Жанр:");
+        Genre genre = null;
+        while (genre == null) {
+            String input = readNonEmptyLine("Жанр: ");
+            for (Genre candidate : Genre.values()) {
+                if (candidate.getDisplayName().equalsIgnoreCase(input)) {
+                    genre = candidate;
+                    break;
+                }
+            }
+            if (genre == null) {
+                System.out.println("Невідомий жанр. Спробуйте ще раз.");
+            }
+        }
 
         try{
             Book book = new Book(title, author, price, year, country, pages, genre);

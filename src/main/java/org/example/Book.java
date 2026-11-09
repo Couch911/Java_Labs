@@ -21,11 +21,11 @@ public class Book {
     
     private int pages;
     
-    private String genre;
+    private Genre genre;
 
 
     public Book(String title, String author, int price, int year,
-                String country, int pages, String genre) {
+                String country, int pages, Genre genre) {
         setTitle(title);
         setAuthor(author);
         setPrice(price);
@@ -133,15 +133,18 @@ public class Book {
     /**
      * Повертає жанр книги.
      */
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
     /**
      * Встановлює жанр книги.
      */
-    public void setGenre(String genre) {
-        this.genre = checkEmpty(genre, "Жанр");
+    public void setGenre(Genre genre) {
+        if (genre == null) {
+            throw new IllegalArgumentException("Жанр не може бути порожнім");
+        }
+        this.genre = genre;
     }
     
     private static String checkEmpty(String value, String fieldName) {

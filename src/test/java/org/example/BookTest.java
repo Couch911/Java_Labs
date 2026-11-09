@@ -13,7 +13,7 @@ class BookTest {
      */
     @Test
     void ExcInvVal() {
-        Book book = new Book("Кобзар", "Тарас Шевченко", 350, 1840, "Україна", 240, "Поезія");
+        Book book = new Book("Кобзар", "Тарас Шевченко", 350, 1840, "Україна", 240, Genre.POETRY);
 
         assertThrows(IllegalArgumentException.class, () -> {
             book.setPrice(-10);
@@ -34,7 +34,7 @@ class BookTest {
     @Test
     void ExcInvCons() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Book("", "Автор", -5, 3000, null, 0, "Жанр");
+            new Book("", "Автор", -5, 3000, null, 0, Genre.FICTION);
         });
     }
 
@@ -43,7 +43,7 @@ class BookTest {
      */
     @Test
     void CreateBookValid() {
-        Book book = new Book("Тигролови", "Іван Багряний", 280, 1944, "Україна", 320, "Роман");
+        Book book = new Book("Тигролови", "Іван Багряний", 280, 1944, "Україна", 320, Genre.FICTION);
 
         assertEquals("Тигролови", book.getTitle());
         assertEquals(280, book.getPrice());
