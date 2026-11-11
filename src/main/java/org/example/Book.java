@@ -3,30 +3,18 @@ package org.example;
 import java.time.Year;
 import java.util.Objects;
 
-/**
- * Клас, що описує книгу.
- */
 public class Book {
     public static final int MIN_YEAR = 1;
 
-    /** Лічильник кількості створених об'єктів класу Book. */
     private static int bookCount = 0;
-    
+
     private String title;
-
-    /** Автор книги (агрегований об'єкт). */
     private Author author;
-    
     private int price;
-    
     private int year;
-    
     private String country;
-    
     private int pages;
-    
     private Genre genre;
-
 
     public Book(String title, Author author, int price, int year,
                 String country, int pages, Genre genre) {
@@ -40,13 +28,6 @@ public class Book {
         bookCount++;
     }
 
-    /**
-     * Конструктор копіювання.
-     * Створює нову книгу на основі вже існуючої.
-     *
-     * @param other об'єкт Book, який копіюється
-     * @throws IllegalArgumentException якщо переданий об'єкт дорівнює {@code null}
-     */
     public Book(Book other) {
         if (other == null) {
             throw new IllegalArgumentException("Об'єкт для копіювання не може бути null");
@@ -61,44 +42,22 @@ public class Book {
         bookCount++;
     }
 
-    /**
-     * Повертає кількість успішно створених об'єктів Book.
-     *
-     * @return загальна кількість створених книг
-     */
     public static int getBookCount() {
         return bookCount;
     }
 
-    /**
-     * Повертає назву книги.
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Встановлює назву книги.
-     */
     public void setTitle(String title) {
         this.title = checkEmpty(title, "Назва");
     }
 
-    /**
-     * Повертає автора книги.
-     *
-     * @return об'єкт {@link Author}
-     */
     public Author getAuthor() {
         return author;
     }
 
-    /**
-     * Встановлює автора книги.
-     *
-     * @param author новий автор книги
-     * @throws IllegalArgumentException якщо автор дорівнює {@code null}
-     */
     public void setAuthor(Author author) {
         if (author == null) {
             throw new IllegalArgumentException("Автор не може бути порожнім (null)");
@@ -106,16 +65,10 @@ public class Book {
         this.author = author;
     }
 
-    /**
-     * Повертає ціну книги.
-     */
     public int getPrice() {
         return price;
     }
 
-    /**
-     * Встановлює ціну книги.
-     */
     public void setPrice(int price) {
         if (price <= 0) {
             throw new IllegalArgumentException("Ціна повинна бути більшою за 0, отримано: " + price);
@@ -123,16 +76,10 @@ public class Book {
         this.price = price;
     }
 
-    /**
-     * Повертає рік видання книги.
-     */
     public int getYear() {
         return year;
     }
 
-    /**
-     * Встановлює рік видання книги.
-     */
     public void setYear(int year) {
         int currentYear = Year.now().getValue();
         if (year < MIN_YEAR || year > currentYear) {
@@ -142,30 +89,18 @@ public class Book {
         this.year = year;
     }
 
-    /**
-     * Повертає країну видання книги.
-     */
     public String getCountry() {
         return country;
     }
 
-    /**
-     * Встановлює країну видання книги.
-     */
     public void setCountry(String country) {
         this.country = checkEmpty(country, "Країна");
     }
 
-    /**
-     * Повертає кількість сторінок книги.
-     */
     public int getPages() {
         return pages;
     }
 
-    /**
-     * Встановлює кількість сторінок книги.
-     */
     public void setPages(int pages) {
         if (pages <= 0) {
             throw new IllegalArgumentException("Кількість сторінок повинна бути більшою за 0, отримано: " + pages);
@@ -173,23 +108,17 @@ public class Book {
         this.pages = pages;
     }
 
-    /**
-     * Повертає жанр книги.
-     */
     public Genre getGenre() {
         return genre;
     }
 
-    /**
-     * Встановлює жанр книги.
-     */
     public void setGenre(Genre genre) {
         if (genre == null) {
             throw new IllegalArgumentException("Жанр не може бути порожнім");
         }
         this.genre = genre;
     }
-    
+
     private static String checkEmpty(String value, String fieldName) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " не може бути порожнім значенням");
@@ -197,9 +126,6 @@ public class Book {
         return value.trim();
     }
 
-    /**
-     * Повертає текстове представлення книги з усіма її полями.
-     */
     @Override
     public String toString() {
         return "Book{title='" + title + "', author='" + author + "', price=" + price
@@ -207,9 +133,6 @@ public class Book {
                 + ", genre='" + genre + "'}";
     }
 
-    /**
-     * Порівнює цю книгу з іншим об'єктом за всіма полями.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -222,9 +145,6 @@ public class Book {
                 && Objects.equals(genre, book.genre);
     }
 
-    /**
-     * Обчислює хеш-код книги на основі всіх її полів.
-     */
     @Override
     public int hashCode() {
         return Objects.hash(title, author, price, year, country, pages, genre);
