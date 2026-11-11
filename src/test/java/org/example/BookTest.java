@@ -3,8 +3,10 @@ package org.example;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Модульні тести для перевірки класів Book та Author. */
 class BookTest {
 
+    /** Перевіряє кидання винятку при некоректних значеннях у сетерах. */
     @Test
     void ExcInvVal() {
         Author author = new Author("Тарас Шевченко", "Україна", 1814);
@@ -17,6 +19,7 @@ class BookTest {
         assertThrows(IllegalArgumentException.class, () -> book.setGenre(null));
     }
 
+    /** Перевіряє кидання винятку при некоректних параметрах у конструкторах. */
     @Test
     void ExcInvCons() {
         Author author = new Author("Іван Франко", "Україна", 1856);
@@ -28,6 +31,7 @@ class BookTest {
         });
     }
 
+    /** Перевіряє успішне створення книги з валідними даними та агрегацією. */
     @Test
     void CreateBookValid() {
         Author author = new Author("Іван Багряний", "Україна", 1906);
@@ -40,6 +44,7 @@ class BookTest {
         assertEquals(Genre.FICTION, book.getGenre());
     }
 
+    /** Перевіряє роботу конструктора копіювання та статичного лічильника. */
     @Test
     void CopyConstructorAndStaticCounter() {
         int before = Book.getBookCount();

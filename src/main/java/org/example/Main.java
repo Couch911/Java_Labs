@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/** Драйвер програми для роботи з книгами та авторами. */
 public class Main {
 
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final List<Book> BOOKS = new ArrayList<>();
 
+    /** Запускає програму, виводить шапку та обробляє головне меню. */
     public static void main(String[] args) {
         printHeader();
 
@@ -36,23 +38,22 @@ public class Main {
         SCANNER.close();
     }
 
+    /** Виводить інформаційну шапку програми. */
     private static void printHeader() {
-        System.out.println("==========================================");
         System.out.println("Практична робота №6");
         System.out.println("Виконав(ла): Бондаренко К.О., група ІН-41/1");
-        System.out.println("Тема: Статичні члени, агрегація, enum");
-        System.out.println("==========================================");
     }
 
+    /** Виводить пункти головного меню. */
     private static void printMenu() {
-        System.out.println("\n===== МЕНЮ =====");
-        System.out.println("1. Створити нову книгу");
+        System.out.println("\n1. Створити нову книгу");
         System.out.println("2. Вивести створені книги");
-        System.out.println("3. Скопіювати існуючу книгу (конструктор копіювання)");
+        System.out.println("3. Скопіювати існуючу книгу");
         System.out.println("4. Показати кількість створених книг");
         System.out.println("0. Завершити роботу");
     }
 
+    /** Зчитує дані з клавіатури, створює книгу та додає її до списку. */
     private static void createBook() {
         System.out.println("\nВведіть дані для книги:");
         String title = readNonEmptyLine("Назва: ");
@@ -73,6 +74,7 @@ public class Main {
         }
     }
 
+    /** Зчитує дані автора та повертає валідний об'єкт Author. */
     private static Author readAuthor() {
         while (true) {
             String fullName = readNonEmptyLine("Ім'я автора: ");
@@ -86,6 +88,7 @@ public class Main {
         }
     }
 
+    /** Виводить список жанрів та повертає обраний елемент Genre. */
     private static Genre readGenre() {
         Genre[] genres = Genre.values();
         System.out.println("Доступні жанри:");
@@ -114,6 +117,7 @@ public class Main {
         }
     }
 
+    /** Виводить список усіх створених книг. */
     private static void printAllBooks() {
         if (BOOKS.isEmpty()) {
             System.out.println("Список книг порожній.");
@@ -125,6 +129,7 @@ public class Main {
         }
     }
 
+    /** Створює копію обраної книги через конструктор копіювання. */
     private static void copyBook() {
         if (BOOKS.isEmpty()) {
             System.out.println("Список книг порожній. Спочатку створіть хоча б одну книгу.");
@@ -145,15 +150,18 @@ public class Main {
         System.out.println("Усього створено книг: " + Book.getBookCount());
     }
 
+    /** Виводить загальну кількість створених об'єктів Book. */
     private static void printBookCount() {
         System.out.println("Загальна кількість створених об'єктів Book: " + Book.getBookCount());
     }
 
+    /** Зчитує рядок з клавіатури без крайніх пробілів. */
     private static String readLine(String prompt) {
         System.out.print(prompt);
         return SCANNER.nextLine().trim();
     }
 
+    /** Зчитує непорожній рядок з клавіатури. */
     private static String readNonEmptyLine(String prompt) {
         while (true) {
             String line = readLine(prompt);
@@ -164,6 +172,7 @@ public class Main {
         }
     }
 
+    /** Зчитує ціле число з обробкою некоректного введення. */
     private static int readInt(String prompt) {
         while (true) {
             String line = readLine(prompt);
