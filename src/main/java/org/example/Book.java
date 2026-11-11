@@ -13,8 +13,9 @@ public class Book {
     private static int bookCount = 0;
     
     private String title;
-    
-    private String author;
+
+    /** Автор книги (агрегований об'єкт). */
+    private Author author;
     
     private int price;
     
@@ -27,7 +28,7 @@ public class Book {
     private Genre genre;
 
 
-    public Book(String title, String author, int price, int year,
+    public Book(String title, Author author, int price, int year,
                 String country, int pages, Genre genre) {
         setTitle(title);
         setAuthor(author);
@@ -85,16 +86,24 @@ public class Book {
 
     /**
      * Повертає автора книги.
+     *
+     * @return об'єкт {@link Author}
      */
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
     /**
      * Встановлює автора книги.
+     *
+     * @param author новий автор книги
+     * @throws IllegalArgumentException якщо автор дорівнює {@code null}
      */
-    public void setAuthor(String author) {
-        this.author = checkEmpty(author, "Автор");
+    public void setAuthor(Author author) {
+        if (author == null) {
+            throw new IllegalArgumentException("Автор не може бути порожнім (null)");
+        }
+        this.author = author;
     }
 
     /**
