@@ -8,6 +8,9 @@ import java.util.Objects;
  */
 public class Book {
     public static final int MIN_YEAR = 1;
+
+    /** Лічильник кількості створених об'єктів класу Book. */
+    private static int bookCount = 0;
     
     private String title;
     
@@ -33,6 +36,37 @@ public class Book {
         setCountry(country);
         setPages(pages);
         setGenre(genre);
+        bookCount++;
+    }
+
+    /**
+     * Конструктор копіювання.
+     * Створює нову книгу на основі вже існуючої.
+     *
+     * @param other об'єкт Book, який копіюється
+     * @throws IllegalArgumentException якщо переданий об'єкт дорівнює {@code null}
+     */
+    public Book(Book other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Об'єкт для копіювання не може бути null");
+        }
+        this.title = other.title;
+        this.author = other.author;
+        this.price = other.price;
+        this.year = other.year;
+        this.country = other.country;
+        this.pages = other.pages;
+        this.genre = other.genre;
+        bookCount++;
+    }
+
+    /**
+     * Повертає кількість успішно створених об'єктів Book.
+     *
+     * @return загальна кількість створених книг
+     */
+    public static int getBookCount() {
+        return bookCount;
     }
 
     /**
