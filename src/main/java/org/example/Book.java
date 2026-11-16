@@ -3,20 +3,19 @@ package org.example;
 import java.time.Year;
 import java.util.Objects;
 
-/** Клас, що описує книгу з валідацією полів та агрегацією автора. */
+/** Клас, що описує книгу з валідацією полів. */
 public class Book {
 
-
     private String title;
-    private Author author;
+    private String author;
     private int price;
     private int year;
     private String country;
     private int pages;
     private Genre genre;
 
-    /** Створює книгу із заданими параметрами та збільшує лічильник. */
-    public Book(String title, Author author, int price, int year,
+    /** Створює книгу із заданими параметрами. */
+    public Book(String title, String author, int price, int year,
                 String country, int pages, Genre genre) {
         setTitle(title);
         setAuthor(author);
@@ -27,7 +26,7 @@ public class Book {
         setGenre(genre);
     }
 
-    /** Створює копію існуючої книги та збільшує лічильник. */
+    /** Створює копію існуючої книги. */
     public Book(Book other) {
         if (other == null) {
             throw new IllegalArgumentException("Об'єкт для копіювання не може бути null");
@@ -41,7 +40,6 @@ public class Book {
         this.genre = other.genre;
     }
 
-
     /** Повертає назву книги. */
     public String getTitle() {
         return title;
@@ -53,16 +51,13 @@ public class Book {
     }
 
     /** Повертає автора книги. */
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
     /** Встановлює автора книги. */
-    public void setAuthor(Author author) {
-        if (author == null) {
-            throw new IllegalArgumentException("Автор не може бути порожнім (null)");
-        }
-        this.author = author;
+    public void setAuthor(String author) {
+        this.author = checkEmpty(author, "Автор");
     }
 
     /** Повертає ціну книги. */
@@ -87,8 +82,8 @@ public class Book {
     public void setYear(int year) {
         int currentYear = Year.now().getValue();
         if (year < 1 || year > currentYear) {
-            throw new IllegalArgumentException("Рік видання повинен бути в межах "
-                    + 1 + "–" + currentYear + ", отримано: " + year);
+            throw new IllegalArgumentException("Рік видання повинен бути в межах 1–"
+                    + currentYear + ", отримано: " + year);
         }
         this.year = year;
     }
@@ -155,7 +150,7 @@ public class Book {
                 && Objects.equals(title, book.title)
                 && Objects.equals(author, book.author)
                 && Objects.equals(country, book.country)
-                && Objects.equals(genre, book.genre);
+                && genre == book.genre;
     }
 
     /** Обчислює хеш-код книги. */

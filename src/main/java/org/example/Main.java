@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/** Драйвер програми для роботи з книгами та авторами. */
+/** Драйвер програми для роботи з книгами. */
 public class Main {
 
     private static final Scanner SCANNER = new Scanner(System.in);
@@ -55,7 +55,7 @@ public class Main {
     private static void createBook() {
         System.out.println("\nВведіть дані для книги:");
         String title = readNonEmptyLine("Назва: ");
-        Author author = readAuthor();
+        String author = readNonEmptyLine("Автор: ");
         int price = readInt("Ціна: ");
         int year = readInt("Рік видання: ");
         String country = readNonEmptyLine("Країна видання: ");
@@ -69,20 +69,6 @@ public class Main {
         } catch (IllegalArgumentException e) {
             System.out.println("Помилка: " + e.getMessage());
             System.out.println("Книгу не створено.");
-        }
-    }
-
-    /** Зчитує дані автора та повертає валідний об'єкт Author. */
-    private static Author readAuthor() {
-        while (true) {
-            String fullName = readNonEmptyLine("Ім'я автора: ");
-            String country = readNonEmptyLine("Країна автора: ");
-            int birthYear = readInt("Рік народження автора: ");
-            try {
-                return new Author(fullName, country, birthYear);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Помилка даних автора: " + e.getMessage());
-            }
         }
     }
 
@@ -104,8 +90,7 @@ public class Main {
             } catch (NumberFormatException ignored) {
             }
 
-            for (int i = 0; i < genres.length; i++) {
-                Genre candidate = genres[i];
+            for (Genre candidate : genres) {
                 if (candidate.getDisplayName().equalsIgnoreCase(input)
                         || candidate.name().equalsIgnoreCase(input)) {
                     return candidate;
@@ -130,6 +115,7 @@ public class Main {
     /** Створює копію обраної книги через конструктор копіювання. */
     private static void copyBook() {
         if (BOOKS.isEmpty()) {
+            System.out.println("Список книг порожній. Спочатку створіть хоча б одну книгу.");
             return;
         }
 
@@ -145,7 +131,6 @@ public class Main {
         BOOKS.add(copy);
         System.out.println("Створено копію книги: " + copy);
     }
-
 
     /** Зчитує рядок з клавіатури без крайніх пробілів. */
     private static String readLine(String prompt) {
