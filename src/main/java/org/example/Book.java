@@ -5,9 +5,7 @@ import java.util.Objects;
 
 /** Клас, що описує книгу з валідацією полів та агрегацією автора. */
 public class Book {
-    public static final int MIN_YEAR = 1;
 
-    private static int bookCount = 0;
 
     private String title;
     private Author author;
@@ -27,7 +25,6 @@ public class Book {
         setCountry(country);
         setPages(pages);
         setGenre(genre);
-        bookCount++;
     }
 
     /** Створює копію існуючої книги та збільшує лічильник. */
@@ -42,13 +39,8 @@ public class Book {
         this.country = other.country;
         this.pages = other.pages;
         this.genre = other.genre;
-        bookCount++;
     }
 
-    /** Повертає загальну кількість створених об'єктів Book. */
-    public static int getBookCount() {
-        return bookCount;
-    }
 
     /** Повертає назву книги. */
     public String getTitle() {
@@ -94,9 +86,9 @@ public class Book {
     /** Встановлює рік видання книги. */
     public void setYear(int year) {
         int currentYear = Year.now().getValue();
-        if (year < MIN_YEAR || year > currentYear) {
+        if (year < 1 || year > currentYear) {
             throw new IllegalArgumentException("Рік видання повинен бути в межах "
-                    + MIN_YEAR + "–" + currentYear + ", отримано: " + year);
+                    + 1 + "–" + currentYear + ", отримано: " + year);
         }
         this.year = year;
     }
@@ -138,7 +130,7 @@ public class Book {
     }
 
     /** Перевіряє, що рядок не null і не порожній. */
-    private static String checkEmpty(String value, String fieldName) {
+    protected String checkEmpty(String value, String fieldName) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " не може бути порожнім значенням");
         }

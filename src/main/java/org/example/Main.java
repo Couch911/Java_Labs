@@ -25,7 +25,6 @@ public class Main {
                     case "1" -> createBook();
                     case "2" -> printAllBooks();
                     case "3" -> copyBook();
-                    case "4" -> printBookCount();
                     case "0" -> working = false;
                     default -> System.out.println("Виберіть вірний пункт меню.");
                 }
@@ -49,7 +48,6 @@ public class Main {
         System.out.println("\n1. Створити нову книгу");
         System.out.println("2. Вивести створені книги");
         System.out.println("3. Скопіювати існуючу книгу");
-        System.out.println("4. Показати кількість створених книг");
         System.out.println("0. Завершити роботу");
     }
 
@@ -132,7 +130,6 @@ public class Main {
     /** Створює копію обраної книги через конструктор копіювання. */
     private static void copyBook() {
         if (BOOKS.isEmpty()) {
-            System.out.println("Список книг порожній. Спочатку створіть хоча б одну книгу.");
             return;
         }
 
@@ -147,13 +144,8 @@ public class Main {
         Book copy = new Book(original);
         BOOKS.add(copy);
         System.out.println("Створено копію книги: " + copy);
-        System.out.println("Усього створено книг: " + Book.getBookCount());
     }
 
-    /** Виводить загальну кількість створених об'єктів Book. */
-    private static void printBookCount() {
-        System.out.println("Загальна кількість створених об'єктів Book: " + Book.getBookCount());
-    }
 
     /** Зчитує рядок з клавіатури без крайніх пробілів. */
     private static String readLine(String prompt) {
