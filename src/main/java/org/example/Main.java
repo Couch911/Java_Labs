@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/** Драйвер програми для роботи з книгами. */
+/** Драйвер програми для роботи з книгами (базовими, електронними та паперовими). */
 public class Main {
 
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final List<Book> BOOKS = new ArrayList<>();
+
+    /** Допоміжний запис для спільних базових полів книги. */
+    private record BaseBookData(String title, String author, int price, int year,
+                                String country, int pages, Genre genre) {
+    }
 
     /** Запускає програму, виводить шапку та обробляє головне меню. */
     public static void main(String[] args) {
@@ -23,8 +28,10 @@ public class Main {
 
                 switch (choice) {
                     case "1" -> createBook();
-                    case "2" -> printAllBooks();
-                    case "3" -> copyBook();
+                    case "2" -> createEBook();
+                    case "3" -> createPaperBook();
+                    case "4" -> printAllBooks();
+                    case "5" -> copyBook();
                     case "0" -> working = false;
                     default -> System.out.println("Виберіть вірний пункт меню.");
                 }
@@ -39,21 +46,22 @@ public class Main {
 
     /** Виводить інформаційну шапку програми. */
     private static void printHeader() {
-        System.out.println("Практична робота №6");
-        System.out.println("Виконав(ла): Бондаренко К.О., група ІН-41/1");
+        System.out.println("Практична робота №7");
+        System.out.println("Виконав: Бондаренко К.О., група ІН-41/1");
     }
 
     /** Виводить пункти головного меню. */
     private static void printMenu() {
-        System.out.println("\n1. Створити нову книгу");
-        System.out.println("2. Вивести створені книги");
-        System.out.println("3. Скопіювати існуючу книгу");
+        System.out.println("\n1. Створити базову книгу (Book)");
+        System.out.println("2. Створити електронну книгу (EBook)");
+        System.out.println("3. Створити паперову книгу (PaperBook)");
+        System.out.println("4. Вивести всі створені книги");
+        System.out.println("5. Скопіювати існуючу книгу");
         System.out.println("0. Завершити роботу");
     }
 
-    /** Зчитує дані з клавіатури, створює книгу та додає її до списку. */
-    private static void createBook() {
-        System.out.println("\nВведіть дані для книги:");
+    /** Зчитує спільні базові поля для будь-якого типу книги. */
+    private static BaseBookData readBaseBookData() {
         String title = readNonEmptyLine("Назва: ");
         String author = readNonEmptyLine("Автор: ");
         int price = readInt("Ціна: ");
@@ -61,14 +69,58 @@ public class Main {
         String country = readNonEmptyLine("Країна видання: ");
         int pages = readInt("Сторінки: ");
         Genre genre = readGenre();
+        return new BaseBookData(title, author, price, year, country, pages, genre);
+    }
+
+    /** Створює базову книгу та додає її до спільної колекції. */
+    private static void createBook() {
+        System.out.println("\nВведіть дані для базової книги:");
+        BaseBookData base = readBaseBookData();
 
         try {
-            Book book = new Book(title, author, price, year, country, pages, genre);
+            Book book = new Book(base.title(), base.author(), base.price(), base.year(),
+                    base.country(), base.pages(), base.genre());
             BOOKS.add(book);
             System.out.println("Книгу додано: " + book);
         } catch (IllegalArgumentException e) {
             System.out.println("Помилка: " + e.getMessage());
             System.out.println("Книгу не створено.");
+        }
+    }
+
+    /** Створює електронну книгу та додає її до спільної колекції. */
+    private static void createEBook() {
+        System.out.println("\nВведіть дані для електронної книги:");
+        BaseBookData base = readBaseBookData();
+        String fileFormat = readNonEmptyLine("Формат файлу : ");
+        double fileSizeMb = readDouble("Розмір файлу : ");
+
+        try {
+            Book eBook = new EBook(base.title(), base.author(), base.price(), base.year(),
+                    base.country(), base.pages(), base.genre(), fileFormat, fileSizeMb);
+            BOOKS.add(eBook);
+            System.out.println("Електронну книгу додано: " + eBook);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка: " + e.getMessage());
+            System.out.println("Електронну книгу не створено.");
+        }
+    }
+
+    /** Створює паперову книгу та додає її до спільної колекції. */
+    private static void createPaperBook() {
+        System.out.println("\nВведіть дані для паперової книги:");
+        BaseBookData base = readBaseBookData();
+        String coverType = readNonEmptyLine("Тип обкладинки Тверда, М'яка тощо: ");
+        int weightGrams = readInt("Вага книги г: ");
+
+        try {
+            Book paperBook = new PaperBook(base.title(), base.author(), base.price(), base.year(),
+                    base.country(), base.pages(), base.genre(), coverType, weightGrams);
+            BOOKS.add(paperBook);
+            System.out.println("Паперову книгу додано: " + paperBook);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка: " + e.getMessage());
+            System.out.println("Паперову книгу не створено.");
         }
     }
 
@@ -81,7 +133,7 @@ public class Main {
         }
 
         while (true) {
-            String input = readNonEmptyLine("Жанр (номер або назва): ");
+            String input = readNonEmptyLine("Жанр номер або назва: ");
             try {
                 int index = Integer.parseInt(input);
                 if (index >= 1 && index <= genres.length) {
@@ -100,7 +152,7 @@ public class Main {
         }
     }
 
-    /** Виводить список усіх створених книг. */
+    /** Поліморфно виводить список усіх створених книг через базовий тип Book. */
     private static void printAllBooks() {
         if (BOOKS.isEmpty()) {
             System.out.println("Список книг порожній.");
@@ -108,11 +160,12 @@ public class Main {
         }
         System.out.println("\nСписок книг:");
         for (int i = 0; i < BOOKS.size(); i++) {
-            System.out.println((i + 1) + ". " + BOOKS.get(i));
+            Book book = BOOKS.get(i);
+            System.out.println((i + 1) + ". " + book);
         }
     }
 
-    /** Створює копію обраної книги через конструктор копіювання. */
+    /** Створює копію обраної книги з урахуванням її фактичного підкласу. */
     private static void copyBook() {
         if (BOOKS.isEmpty()) {
             System.out.println("Список книг порожній. Спочатку створіть хоча б одну книгу.");
@@ -127,7 +180,15 @@ public class Main {
         }
 
         Book original = BOOKS.get(number - 1);
-        Book copy = new Book(original);
+        Book copy;
+        if (original instanceof EBook eBook) {
+            copy = new EBook(eBook);
+        } else if (original instanceof PaperBook paperBook) {
+            copy = new PaperBook(paperBook);
+        } else {
+            copy = new Book(original);
+        }
+
         BOOKS.add(copy);
         System.out.println("Створено копію книги: " + copy);
     }
@@ -161,6 +222,22 @@ public class Main {
                 return Integer.parseInt(line);
             } catch (NumberFormatException e) {
                 System.out.println("Введіть ціле число.");
+            }
+        }
+    }
+
+    /** Зчитує дробове число з обробкою некоректного введення. */
+    private static double readDouble(String prompt) {
+        while (true) {
+            String line = readLine(prompt).replace(',', '.');
+            if (line.isEmpty()) {
+                System.out.println("Значення не може бути порожнім.");
+                continue;
+            }
+            try {
+                return Double.parseDouble(line);
+            } catch (NumberFormatException e) {
+                System.out.println("Введіть число наприклад, 4.5.");
             }
         }
     }
